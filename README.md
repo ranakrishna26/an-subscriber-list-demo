@@ -26,24 +26,27 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 ## Embed in Framer
 
-Use a **desktop / MacBook-sized** frame. The page looks like the browser: empty space around a centered 518×760 panel (not stretched, not cropped).
+The embed **always shows the full panel** (search + controls + list). If your Framer frame is smaller than 518×760, it scales down to fit — no more middle crop.
 
-Recommended Framer frame size: **1440 × 900** (MacBook-like).
+### Inline in a page section (what you have now)
+
+1. Select the Embed
+2. Set **Width** to **518** (Fixed) — or Fill if the column is ~518+
+3. Set **Height** to **760** (Fixed) — **not** `1fr` / Fill (that was cropping it)
+4. HTML:
 
 ```html
 <iframe
   src="https://an-subscriber-list-demo.vercel.app/?embed=1"
   title="AN Subscriber List"
-  width="1440"
-  height="900"
-  style="border:0;width:1440px;height:900px;display:block;background:#f5f5f5;"
+  style="border:0;width:100%;height:100%;display:block;background:#f5f5f5;"
   loading="lazy"
 ></iframe>
 ```
 
-Dark page chrome: `?embed=1&theme=dark` (and use a dark background on the iframe if you want).
+### Full MacBook-sized mock
 
-Do **not** set the iframe to `width/height: 100%` of a small frame — that crops/zooms the UI. Size the Framer Embed to ~1440×900 so the full centered panel is visible.
+Frame **1440 × 900** — panel sits centered at natural size with empty space around it. Same iframe URL.
 
 ## What you can try
 
