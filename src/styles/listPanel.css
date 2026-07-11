@@ -104,21 +104,7 @@ body {
   box-sizing: border-box;
 }
 
-.app-shell__stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.app-shell__scaler {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-origin: top left;
-}
-
-/* Framer: 1106×718.5 design frame, contain-scaled to iframe */
+/* Framer embed: contain 1106×718.5 frame, center UI, never crop */
 .app-shell--embed {
   width: 100%;
   height: 100%;
@@ -140,35 +126,41 @@ html[data-embed='true'] #root {
   background: var(--color-background-fill-0);
 }
 
-.app-shell__frame {
+.embed-frame {
   position: relative;
   flex-shrink: 0;
   overflow: hidden;
   background: var(--color-background-fill-0);
 }
 
-.app-shell__frame-inner {
+.embed-frame__canvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   transform-origin: top left;
+  overflow: hidden;
   background: var(--color-background-fill-0);
 }
 
-.app-shell__frame-content {
+.embed-frame__center {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
 }
 
-.app-shell--embed .an-sub-panel {
-  width: 518px;
-  height: 760px;
-  max-width: none;
-  margin: 0;
+.embed-frame__panel-slot {
+  width: 480px;
+  height: 620px;
   flex-shrink: 0;
+}
+
+.embed-frame__panel-slot .an-sub-panel {
+  width: 100%;
+  height: 100%;
+  max-width: none;
 }
 
 .app-shell__theme-toggle {
