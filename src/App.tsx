@@ -4,9 +4,13 @@ import './styles/listPanel.css';
 
 type Theme = 'connect-light' | 'connect-dark';
 
+/** Framer embed design frame (fixed aspect). */
+export const FRAME_WIDTH = 1106;
+export const FRAME_HEIGHT = 718.5;
+
 const PANEL_WIDTH = 518;
 const PANEL_HEIGHT = 760;
-const PANEL_PAD = 24;
+const PANEL_PAD = 32;
 
 function readQuery() {
   const params = new URLSearchParams(window.location.search);
@@ -25,7 +29,14 @@ export default function App() {
   const [theme, setTheme] = useState<Theme>(initial.theme);
   const embed = initial.embed;
   const shellRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [frameScale, setFrameScale] = useState(1);
+
+  // Panel scaled to fit inside the design frame, then frame scales to iframe
+  const panelScale = Math.min(
+    1,
+    (FRAME_WIDTH - PANEL_PAD * 2) / PANEL_WIDTH,
+    (FRAME_HEIGHT - PANEL_PAD * 2) / PANEL_HEIGHT,
+  );
 
   useEffect(() => {
     document.body.className = theme;
@@ -39,12 +50,8 @@ export default function App() {
 
     const update = () => {
       const { width, height } = el.getBoundingClientRect();
-      const next = Math.min(
-        1,
-        (width - PANEL_PAD * 2) / PANEL_WIDTH,
-        (height - PANEL_PAD * 2) / PANEL_HEIGHT,
-      );
-      setScale(Number.isFinite(next) && next > 0 ? next : 1);
+      const next = Math.min(width / FRAME_WIDTH, height / FRAME_HEIGHT);
+      setFrameScale(Number.isFinite(next) && next > 0 ? next : 1);
     };
 
     update();
@@ -71,32 +78,48 @@ export default function App() {
           {theme === 'connect-light' ? 'Dark theme' : 'Light theme'}
         </button>
       )}
-      <div
-        className="app-shell__stage"
-        style={
-          embed
-            ? {
-                width: PANEL_WIDTH * scale,
-                height: PANEL_HEIGHT * scale,
-              }
-            : undefined
-        }
-      >
+
+      {embed ? (
         <div
-          className="app-shell__scaler"
-          style={
-            embed
-              ? {
-                  width: PANEL_WIDTH,
-                  height: PANEL_HEIGHT,
-                  transform: `scale(${scale})`,
-                }
-              : undefined
-          }
+          className="app-shell__frame"
+          style={{
+            width: FRAME_WIDTH * frameScale,
+            height: FRAME_HEIGHT * frameScale,
+          }}
         >
-          <SubscriberListDemo />
+          <div
+            className="app-shell__frame-inner"
+            style={{
+              width: FRAME_WIDTH,
+              height: FRAME_HEIGHT,
+              transform: `scale(${frameScale})`,
+            }}
+          >
+            <div className="app-shell__frame-content">
+              <div
+                className="app-shell__stage"
+                style={{
+                  width: PANEL_WIDTH * panelScale,
+                  height: PANEL_HEIGHT * panelScale,
+                }}
+              >
+                <div
+                  className="app-shell__scaler"
+                  style={{
+                    width: PANEL_WIDTH,
+                    height: PANEL_HEIGHT,
+                    transform: `scale(${panelScale})`,
+                  }}
+                >
+                  <SubscriberListDemo />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <SubscriberListDemo />
+      )}
     </div>
   );
 }

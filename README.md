@@ -26,14 +26,9 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 ## Embed in Framer
 
-The embed **always shows the full panel** (search + controls + list). If your Framer frame is smaller than 518×760, it scales down to fit — no more middle crop.
+Design frame: **1106 × 718.5** — list panel centered inside; frame scales to the iframe while keeping that aspect ratio.
 
-### Inline in a page section (what you have now)
-
-1. Select the Embed
-2. Set **Width** to **518** (Fixed) — or Fill if the column is ~518+
-3. Set **Height** to **760** (Fixed) — **not** `1fr` / Fill (that was cropping it)
-4. HTML:
+In Framer, size the Embed to **1106 × 718.5** (Fixed).
 
 ```html
 <iframe
@@ -44,9 +39,7 @@ The embed **always shows the full panel** (search + controls + list). If your Fr
 ></iframe>
 ```
 
-### Full MacBook-sized mock
-
-Frame **1440 × 900** — panel sits centered at natural size with empty space around it. Same iframe URL.
+Dark: `?embed=1&theme=dark`.
 
 ## What you can try
 
