@@ -91,28 +91,23 @@ body {
 }
 
 .app-shell {
+  width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--dimension-16);
   padding: 24px 16px;
+  box-sizing: border-box;
 }
 
-/* Framer / iframe: panel fills the embed frame exactly */
+/* Framer / iframe: same centered page look as the browser (no stretch/zoom) */
 .app-shell--embed {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  justify-content: stretch;
-  align-items: stretch;
-  padding: 0;
   gap: 0;
-  overflow: hidden;
-  background: transparent;
+  background: var(--color-background-fill-0);
 }
 
 html[data-embed='true'],
@@ -120,24 +115,17 @@ html[data-embed='true'] body,
 html[data-embed='true'] #root {
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  background: transparent;
+  overflow: auto;
+  background: var(--color-background-fill-0);
 }
 
 .app-shell--embed .an-sub-panel {
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  min-height: 0;
+  /* Keep natural panel size; do not stretch to iframe */
+  width: 518px;
+  height: 760px;
+  max-width: calc(100% - 32px);
   margin: 0;
-  border: 0;
-  border-radius: 0;
-}
-
-.app-shell--embed .an-sub-panel__list {
-  flex: 1;
-  max-height: none;
-  min-height: 0;
+  flex-shrink: 0;
 }
 
 .app-shell__theme-toggle {

@@ -26,18 +26,24 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 ## Embed in Framer
 
-Make the iframe fill the Framer frame (100% × 100%). The panel stretches to match.
+Use a **desktop / MacBook-sized** frame. The page looks like the browser: empty space around a centered 518×760 panel (not stretched, not cropped).
+
+Recommended Framer frame size: **1440 × 900** (MacBook-like).
 
 ```html
 <iframe
   src="https://an-subscriber-list-demo.vercel.app/?embed=1"
   title="AN Subscriber List"
-  style="border:0;width:100%;height:100%;display:block;background:transparent;"
+  width="1440"
+  height="900"
+  style="border:0;width:1440px;height:900px;display:block;background:#f5f5f5;"
   loading="lazy"
 ></iframe>
 ```
 
-In Framer: size the Embed/Frame to whatever you want — the UI fills that box. Dark: add `&theme=dark` to the URL.
+Dark page chrome: `?embed=1&theme=dark` (and use a dark background on the iframe if you want).
+
+Do **not** set the iframe to `width/height: 100%` of a small frame — that crops/zooms the UI. Size the Framer Embed to ~1440×900 so the full centered panel is visible.
 
 ## What you can try
 
