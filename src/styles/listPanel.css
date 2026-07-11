@@ -147,19 +147,26 @@ html[data-embed='true'] #root {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
   box-sizing: border-box;
 }
 
-.embed-frame__panel-slot {
-  width: 480px;
-  height: 620px;
+/* Uniform scale wrapper — preserves component proportions */
+.embed-scale-slot {
+  position: relative;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
-.embed-frame__panel-slot .an-sub-panel {
-  width: 100%;
-  height: 100%;
+.embed-scale-slot__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.embed-scale-slot__inner .an-sub-panel {
+  width: 518px;
+  height: 760px;
   max-width: none;
 }
 

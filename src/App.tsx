@@ -4,13 +4,14 @@ import './styles/listPanel.css';
 
 type Theme = 'connect-light' | 'connect-dark';
 
-/** Framer embed design frame — fixed aspect, UI centered inside. */
+/** Framer embed design frame. */
 export const FRAME_WIDTH = 1106;
 export const FRAME_HEIGHT = 718.5;
 
-/** Panel sized to fit inside the frame with padding (fully visible). */
-const PANEL_WIDTH = 480;
-const PANEL_HEIGHT = 620;
+/** Original panel design size — always scaled uniformly (never stretched). */
+const PANEL_WIDTH = 518;
+const PANEL_HEIGHT = 760;
+const FRAME_PAD = 48;
 
 function readQuery() {
   const params = new URLSearchParams(window.location.search);
@@ -24,9 +25,6 @@ function readQuery() {
   return { theme, embed };
 }
 
-/**
- * Scale a design frame into a container (object-fit: contain).
- */
 function useContainScale(
   enabled: boolean,
   containerRef: React.RefObject<HTMLElement | null>,
@@ -56,17 +54,50 @@ function useContainScale(
   return scale;
 }
 
+/** Uniform scale so the full panel fits inside the design frame. */
+const panelScale = Math.min(
+  1,
+  (FRAME_WIDTH - FRAME_PAD * 2) / PANEL_WIDTH,
+  (FRAME_HEIGHT - FRAME_PAD * 2) / PANEL_HEIGHT,
+);
+
 export default function App() {
   const initial = useMemo(() => readQuery(), []);
   const [theme, setTheme] = useState<Theme>(initial.theme);
   const embed = initial.embed;
   const shellRef = useRef<HTMLDivElement>(null);
-  const scale = useContainScale(embed, shellRef, FRAME_WIDTH, FRAME_HEIGHT);
+  const frameScale = useContainScale(
+    embed,
+    shellRef,
+    FRAME_WIDTH,
+    FRAME_HEIGHT,
+  );
 
   useEffect(() => {
     document.body.className = theme;
     document.documentElement.dataset.embed = embed ? 'true' : 'false';
   }, [theme, embed]);
+
+  const panel = (
+    <div
+      className="embed-scale-slot"
+      style={{
+        width: PANEL_WIDTH * panelScale,
+        height: PANEL_HEIGHT * panelScale,
+      }}
+    >
+      <div
+        className="embed-scale-slot__inner"
+        style={{
+          width: PANEL_WIDTH,
+          height: PANEL_HEIGHT,
+          transform: `scale(${panelScale})`,
+        }}
+      >
+        <SubscriberListDemo />
+      </div>
+    </div>
+  );
 
   return (
     <div
@@ -91,8 +122,8 @@ export default function App() {
         <div
           className="embed-frame"
           style={{
-            width: FRAME_WIDTH * scale,
-            height: FRAME_HEIGHT * scale,
+            width: FRAME_WIDTH * frameScale,
+            height: FRAME_HEIGHT * frameScale,
           }}
         >
           <div
@@ -100,26 +131,14 @@ export default function App() {
             style={{
               width: FRAME_WIDTH,
               height: FRAME_HEIGHT,
-              transform: `scale(${scale})`,
+              transform: `scale(${frameScale})`,
             }}
           >
-            <div className="embed-frame__center">
-              <div
-                className="embed-frame__panel-slot"
-                style={{ width: PANEL_WIDTH, height: PANEL_HEIGHT }}
-              >
-                <SubscriberListDemo />
-              </div>
-            </div>
+            <div className="embed-frame__center">{panel}</div>
           </div>
         </div>
       ) : (
-        <div
-          className="embed-frame__panel-slot"
-          style={{ width: PANEL_WIDTH, height: PANEL_HEIGHT }}
-        >
-          <SubscriberListDemo />
-        </div>
+        panel
       )}
     </div>
   );
